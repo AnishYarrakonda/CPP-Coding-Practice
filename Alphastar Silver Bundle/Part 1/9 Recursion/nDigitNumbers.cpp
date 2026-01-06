@@ -35,30 +35,28 @@ template<typename T> void prettyprint(const v<T>& vec) { for(auto &x : vec) cout
 template<typename T> void prettyprint(const vv<T>& mat) { for(auto &row : mat) prettyprint(row); }
 
 // Solution Code below
-int N;
+int M, N;
 vi options;
 
 void recurse(int num) {
-
     for (int i : options) {
         int newNum = num*10+i;
-        if (isPrime(newNum)) {
-            if (floor(log10(newNum))+1 == N) {
-                cout << newNum << endl;
-            } else {
-                recurse(newNum);
-            }
+        if (floor(log10(newNum))+1 == N) {
+            cout << newNum << endl;
+        } else {
+            recurse(newNum);
         }
     }
 }
 
 int main() {
-    cin >> N;
-    rep(i,0,N) {
+    cin >> M;
+    rep(i,0,M) {
         int x;
         cin >> x;
         options.push_back(x);
     }
+    cin >> N;
 
     recurse(0);
 
