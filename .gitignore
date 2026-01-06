@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Compiled binaries
+*.out
+*.exe
+Algorithm Practice/*
+USACO/*/*
+!*.cpp
+
+# Python venv (just in case)
+.venv/
+
