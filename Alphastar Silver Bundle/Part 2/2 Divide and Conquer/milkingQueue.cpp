@@ -29,7 +29,7 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 
 // Solution Code below
 
-int total = 0;
+ll total = 0;
 
 vi mergeVectors(vi arr1, vi arr2) {
     int i = 0, j = 0;
