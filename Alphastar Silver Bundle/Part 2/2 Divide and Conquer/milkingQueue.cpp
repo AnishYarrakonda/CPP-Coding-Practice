@@ -42,8 +42,8 @@ vi mergeVectors(vi arr1, vi arr2) {
             i++;
         } else {
             result.push_back(arr2[j]);
+            total += arr1.size() - i;
             j++;
-            total++;
         }    
     }
 
