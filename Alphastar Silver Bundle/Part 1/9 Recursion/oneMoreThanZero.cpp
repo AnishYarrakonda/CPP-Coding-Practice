@@ -29,6 +29,41 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 
 // Solution Code below
 
+int N;
+
+void printBinary(int x) {
+    stack<int> s;
+    rep(i,0,N) {
+        s.push(x % 2);
+        x/=2;
+    }
+    while (!s.empty()) {
+        cout << s.top();
+        s.pop();
+    }
+    cout << "\n";
+}
+
+int countSetBits(int n) {
+    int count = 0;
+    while (n > 0) {
+        n &= (n - 1);
+        count++;
+    }
+    return count;
+}
+
 int main() {
+    cin >> N;
+
+    int count = 0;
+    rep(i,1,pow(2,N)) {
+        if (countSetBits(i) > N-countSetBits(i)) {
+            printBinary(i);
+            count++;
+        }
+    }
+    cout << count << endl;
+
     return 0;
 }
