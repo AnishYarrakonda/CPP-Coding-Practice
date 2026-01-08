@@ -30,39 +30,44 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 // Solution Code below
 
 int main() {
-    int C, N; 
+    int C, N;
     cin >> C >> N;
 
-    multiset<int> seniors;
-    rep(i,0,C) {
-        int time;
-        cin >> time;
-        seniors.insert(time);
+    vector<int> seniors(C);
+    for (int i = 0; i < C; i++) cin >> seniors[i];
+    sort(seniors.begin(), seniors.end());
+
+    vector<pi> freshmen(N);
+    for (int i = 0; i < N; i++) {
+        cin >> freshmen[i].first >> freshmen[i].second;
     }
-    multiset<pi> freshmen;
-    rep(i,0,N) {
-        int time1, time2;
-        cin >> time1 >> time2;
-        freshmen.insert({time1, time2});
-    }
+    sort(freshmen.begin(), freshmen.end()); // by start time
+
+    // min-heap by end time
+    priority_queue<int, vector<int>, greater<int>> pq;
 
     int ans = 0;
-    while (!(seniors.empty() || freshmen.empty())) {
-        int time = *seniors.begin();
-        pi fresh = *freshmen.begin();
+    int j = 0;
 
-        if (time < fresh.first) {
-            seniors.erase(seniors.begin());
-        } else if (time > fresh.second) {
-            freshmen.erase(freshmen.begin());
-        } else {
-            seniors.erase(seniors.begin());
-            freshmen.erase(freshmen.begin());
+    for (int time : seniors) {
+        // add all freshmen who can start by this time
+        while (j < N && freshmen[j].first <= time) {
+            pq.push(freshmen[j].second);
+            j++;
+        }
+
+        // remove freshmen who already expired
+        while (!pq.empty() && pq.top() < time) {
+            pq.pop();
+        }
+
+        // match if possible
+        if (!pq.empty()) {
+            pq.pop();
             ans++;
         }
     }
 
-    cout << ans << endl;
-
+    cout << ans << "\n";
     return 0;
 }
