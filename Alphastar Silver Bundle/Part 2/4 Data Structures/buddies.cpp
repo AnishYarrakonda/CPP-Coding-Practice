@@ -32,13 +32,37 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 int main() {
     int C, N; 
     cin >> C >> N;
-    vi seniors(C); 
-    rep(i,0,C) cin >> seniors[i];
-    v<pi> freshmen(N); 
-    rep(i,0,N) cin >> freshmen[i].first >> freshmen[i].second;
 
-    
+    multiset<int> seniors;
+    rep(i,0,C) {
+        int time;
+        cin >> time;
+        seniors.insert(time);
+    }
+    multiset<pi> freshmen;
+    rep(i,0,N) {
+        int time1, time2;
+        cin >> time1 >> time2;
+        freshmen.insert({time1, time2});
+    }
 
+    int ans = 0;
+    while (!(seniors.empty() || freshmen.empty())) {
+        int time = *seniors.begin();
+        pi fresh = *freshmen.begin();
+
+        if (time < fresh.first) {
+            seniors.erase(seniors.begin());
+        } else if (time > fresh.second) {
+            freshmen.erase(freshmen.begin());
+        } else {
+            seniors.erase(seniors.begin());
+            freshmen.erase(freshmen.begin());
+            ans++;
+        }
+    }
+
+    cout << ans << endl;
 
     return 0;
 }
