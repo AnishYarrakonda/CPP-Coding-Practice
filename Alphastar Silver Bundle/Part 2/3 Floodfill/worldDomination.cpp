@@ -28,7 +28,33 @@ template<typename T> void prettyprint(const vv<T>& mat) { for(auto &row : mat) p
 template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : vec) cout << x << '\n'; }
 
 // Solution Code below
+int N;
+
+pi bestContinent = {0, 1e9};
+
+void floodfill(vvi& grid, vvi& visited) {
+    rep(i,0,N) {
+        rep(j,0,N) {
+            
+        }
+    }
+}
 
 int main() {
+    cin >> N;
+    vvi grid(N, vi(N, 0));
+    rep(i,0,N) {
+        rep(j,0,N) {
+            char c;
+            cin >> c;
+            if (c == '#') {
+                grid[i][j] = 1;
+            }
+        }
+    }
+    vvi visited(N, vi(N, 0));
+
+
+
     return 0;
 }
