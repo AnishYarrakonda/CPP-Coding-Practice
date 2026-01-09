@@ -43,7 +43,6 @@ int main() {
     set<int> ribbonTrees;
     ll bestProd = 0;
 
-
     int ans = 0;
     for (auto [day, stuff] : events) {
         auto id = stuff.first;
