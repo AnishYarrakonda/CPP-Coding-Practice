@@ -1,50 +1,74 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+
 using namespace std;
 
-// basic types
-using ll = long long;
-using db = double;
-using str = string;
+struct Measurement {
+    int day, id, change;
+};
 
-// generic templates
-template<typename A, typename B> using p = pair<A,B>;               // Pair
-template<typename T> using v = vector<T>;                           // 1D vector
-template<typename T> using vv = vector<vector<T>>;                  // 2D vector
-template<typename T> using uset = unordered_set<T>;                 // unordered set
-template<typename K, typename V> using umap = unordered_map<K,V>;   // unordered map
-
-// even shorter shorthands for data types dealing with int
-using pi = pair<int,int>;
-using vi = vector<int>;
-using vvi = vector<vi>;
-
-// macros
-#define rep(i,a,b) for(int i = a; i < (b); i++)     // for loop
-#define all(x) (x).begin(),(x).end()                // entire container
-
-// debugging (print 1D and 2D vectors to console)
-template<typename T> void prettyprint(const v<T>& vec) { for(auto &x : vec) cout << x << ' '; cout << '\n'; }
-template<typename T> void prettyprint(const vv<T>& mat) { for(auto &row : mat) prettyprint(row); }
-template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : vec) cout << x << '\n'; }
-
-// Solution Code below
+bool compareMeas(Measurement a, Measurement b) {
+    return a.day < b.day;
+}
 
 int main() {
-    int N, A; cin >> N >> A;
-    unordered_map<int,ll> acorns;
-    unordered_set<int> bestID = {-1};
-    ll mostAcorns = -1e18;
+    int N;
+    long long A;
+    cin >> N >> A;
 
-    multiset<p<int,pi>> events;
+    vector<Measurement> log(N);
+    for (int i = 0; i < N; i++) {
+        cin >> log[i].day >> log[i].id >> log[i].change;
+    }
+    sort(log.begin(), log.end(), compareMeas);
 
-    rep(i,0,N) {
-        int day, ID, change;
-        cin >> day >> ID >> change;
-        events.insert({day, {ID, change}});
+    map<int, long long> treeOutputs;
+    multiset<long long> allOutputs;
+    
+    // We treat the "many other trees" as a very large constant 
+    // to ensure there's always something at the initial value A.
+    // However, for this specific problem, tracking just the trees that 
+    // move is enough if we represent the "base" trees correctly.
+    allOutputs.insert(A); 
+    
+    int changes = 0;
+
+    for (auto& m : log) {
+        long long oldVal = treeOutputs.count(m.id) ? treeOutputs[m.id] : A;
+        long long oldMax = *allOutputs.rbegin();
+        int oldMaxCount = allOutputs.count(oldMax);
+
+        // Boolean: Was this specific tree a leader before?
+        bool wasLeader = (oldVal == oldMax);
+
+        // Update frequencies
+        auto it = allOutputs.find(oldVal);
+        if (it != allOutputs.end()) allOutputs.erase(it);
+        
+        treeOutputs[m.id] = oldVal + m.change;
+        allOutputs.insert(treeOutputs[m.id]);
+
+        long long newMax = *allOutputs.rbegin();
+        int newMaxCount = allOutputs.count(newMax);
+        
+        // Boolean: Is this specific tree a leader now?
+        bool isLeader = (treeOutputs[m.id] == newMax);
+
+        // Logic to determine if the ribbon placement changed:
+        if (wasLeader) {
+            // It was a leader but now things changed
+            if (!isLeader || oldMaxCount != 1 || newMaxCount != 1) {
+                changes++;
+            }
+        } else if (isLeader) {
+            // It wasn't a leader, but now it is
+            changes++;
+        }
     }
 
-    int ribbons = 0;
-    
-    
+    cout << changes << endl;
     return 0;
 }
