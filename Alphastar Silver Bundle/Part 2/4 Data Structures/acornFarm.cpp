@@ -39,34 +39,18 @@ int main() {
     }  
     sort(all(events));
 
-    umap<int,ll>idToProd;
-    set<int> ribbonTrees;
-    ll bestProd = 0;
+    multiset<p<ll,int>> trees;
+    trees.insert({-1, -1e18});
 
     int ans = 0;
     for (auto [day, stuff] : events) {
         auto id = stuff.first;
         auto change = stuff.second;
-
-        idToProd.insert({id, A});
-        idToProd[id] += change;
-
-        if (idToProd[id] > bestProd) {
-            if (ribbonTrees.count(id)) {
-                ribbonTrees.clear();
-                ribbonTrees.insert(id);
-            } else {
-                ribbonTrees.clear();
-                ribbonTrees.insert(id);
-                ans++;
-            }
-        } else if (idToProd == bestProd) {
-            
-        }
-
+        
+        
     }
 
-
+    cout << ans << endl;
 
     return 0;
 }
