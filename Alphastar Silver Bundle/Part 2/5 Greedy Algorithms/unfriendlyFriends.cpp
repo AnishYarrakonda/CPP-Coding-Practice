@@ -22,48 +22,43 @@ using vvi = vector<vi>;
 #define rep(i,a,b) for(int i = a; i < (b); i++)     // for loop
 #define all(x) (x).begin(),(x).end()                // entire container
 
-// debugging (print 1D and 2D vectors to console)
-template<typename T> void prettyprint(const v<T>& vec) { for(auto &x : vec) cout << x << ' '; cout << '\n'; }
-template<typename T> void prettyprint(const vv<T>& mat) { for(auto &row : mat) prettyprint(row); }
-template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : vec) cout << x << '\n'; }
-
-// Solution Code below
-
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int N, K;
     cin >> N >> K;
 
-    priority_queue<pi, v<pi>, greater<pi>> pq;
+    // Each interval is (right, left)
+    v<pi> intervals;
+    intervals.reserve(K);
 
     rep(i,0,K) {
         int u, v;
         cin >> u >> v;
 
-        pq.push({u,v});
-        pq.push({v,u});
+        int l = min(u, v);
+        int r = max(u, v) - 1;   // must cut somewhere in [l, r]
+
+        intervals.push_back({r, l});
     }
 
-    int ANS = 0;
+    // Sort by earliest right endpoint
+    sort(all(intervals));
 
-    int start = 0;
-    int meanest = 1e9;
+    int last_cut = -1;
+    int cuts = 0;
 
-    while (!pq.empty()) {
-
-        auto [u, v] = pq.top();
-        pq.pop();
-
-        if (u == meanest) {
-            start = u;
-            meanest = 1e9;
-            ANS++;
+    for (auto [r, l] : intervals) {
+        if (last_cut < l) {
+            cuts++;
+            last_cut = r;
         }
-
-
     }
 
-    cout << ANS << endl;
-
+    // Number of photos = number of cuts + 1
+    int ANS = cuts + 1;
+    cout << ANS << "\n";
 
     return 0;
 }
