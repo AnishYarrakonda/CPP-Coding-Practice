@@ -69,6 +69,6 @@ int main() {
         }
     }
 
-    cout << changes << endl;
+    cout << changes+1 << endl;
     return 0;
 }
