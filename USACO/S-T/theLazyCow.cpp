@@ -47,7 +47,6 @@ int reachGrass(int x, int y, vvi& prefix) {
     return total;
 }
 
-
 int main() {
     freopen("lazy.in", "r", stdin);
     freopen("lazy.out", "w", stdout);
