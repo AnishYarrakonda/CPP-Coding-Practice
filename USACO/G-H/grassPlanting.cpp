@@ -36,8 +36,25 @@ template<typename T> void prettyprint(const vv<T>& mat) { for(auto &row : mat) p
 
 // Solution Code below
 
+void dfs(int child, int parent, vvi& adj, vi& grassTypes) {
+    int i = 1;
+    for (auto adjNode : adj[child]) {
+        while (i == grassTypes[parent] || i == grassTypes[child]) i++;
+        if (adjNode != parent) {
+            grassTypes[adjNode] = i;
+            dfs(adjNode, child, adj, grassTypes);
+            i++;
+        }
+    }
+}
+
 int main() {
-    int N; cin >> N;
+    freopen("planting.in", "r", stdin);
+    freopen("planting.out", "w", stdout);
+
+    int N;
+    cin >> N;
+
     vvi adj(N+1);
     rep(i,1,N) {
         int u, v; cin >> u >> v;
@@ -45,7 +62,12 @@ int main() {
         adj[v].push_back(u);
     }
 
-    
+    vi grassTypes(N+1, 0);
+    grassTypes[1] = 1;
+
+    dfs(1, 1, adj, grassTypes);
+
+    cout << *max_element(all(grassTypes)) << endl;
 
     return 0;
 }
