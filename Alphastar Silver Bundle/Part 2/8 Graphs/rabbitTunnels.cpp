@@ -29,6 +29,35 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 
 // Solution Code below
 
+int dfs(int child, int parent, int K, int minR, vv<pi>& adj) {
+    int total = 0;
+    for (auto [adjNode, r] : adj[child]) {
+        if (adjNode == parent) continue;
+        if (min(r, minR) >= K) {
+            total += dfs(adjNode, child, K, min(r, minR), adj);
+            total++;
+        }
+    }
+    return total;
+}
+
 int main() {
+    int N, Q;
+    cin >> N >> Q;
+
+    vv<pi> adj(N+1);
+    rep(i,0,N-1) {
+        int p, q, r;
+        cin >> p >> q >> r;
+        adj[p].push_back({q, r});
+        adj[q].push_back({p, r});
+    }
+
+    rep(i,0,Q) {
+        int k, v;
+        cin >> k >> v;
+        cout << dfs(v, v, k, 1e9, adj) << endl;
+    }
+
     return 0;
 }
