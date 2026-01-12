@@ -1,69 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// basic types
-using ll = long long;
-using db = double;
-using str = string;
-
-// generic templates
-template<typename A, typename B> using p = pair<A,B>;               // Pair
-template<typename T> using v = vector<T>;                           // 1D vector
-template<typename T> using vv = vector<vector<T>>;                  // 2D vector
-template<typename T> using uset = unordered_set<T>;                 // unordered set
-template<typename K, typename V> using umap = unordered_map<K,V>;   // unordered map
-
-// even shorter shorthands for data types dealing with int
-using pi = pair<int,int>;
-using vi = vector<int>;
-using vvi = vector<vi>;
-
-// macros
-#define rep(i,a,b) for(int i = a; i < (b); i++)     // for loop
-#define all(x) (x).begin(),(x).end()                // entire container
-
-// debugging (print 1D and 2D vectors to console)
-template<typename T> void prettyprint(const v<T>& vec) { for(auto &x : vec) cout << x << ' '; cout << '\n'; }
-template<typename T> void prettyprint(const vv<T>& mat) { for(auto &row : mat) prettyprint(row); }
-template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : vec) cout << x << '\n'; }
-
-// Solution Code below
+const int MAXN = 1005; // grid size
 
 int main() {
-    int N; cin >> N;
-    pi start; cin >> start.first >> start.second;
-    set<pi> haybales;
-    rep(i,0,N) {
+    int N;
+    int sx, sy;
+    cin >> N >> sx >> sy;
+
+    bool haybale[MAXN][MAXN] = {0};
+    int broken[MAXN][MAXN];
+    memset(broken, -1, sizeof(broken));
+
+    for (int i = 0; i < N; i++) {
         int x, y;
         cin >> x >> y;
-        haybales.insert({x, y});
+        haybale[x][y] = true;
     }
 
-    map<pi,int> broken; broken[start] = 0;
-    queue<pi> q; q.push(start);
+    queue<pair<int,int>> q;
+    broken[sx][sy] = 0;
+    q.push({sx, sy});
 
-    vi dx = {1, -1, 0, 0};
-    vi dy = {0, 0, 1, -1};
+    int dx[4] = {1, -1, 0, 0};
+    int dy[4] = {0, 0, 1, -1};
 
     while (!q.empty()) {
         auto [x, y] = q.front(); q.pop();
+        int curCost = broken[x][y];
 
-        rep(k,0,4) {
-            int a = x + dx[k];
-            int b = y + dy[k];
-            pi pos = {a,b};
-            int cost = broken[{x, y}] + haybales.count(pos);
+        for (int k = 0; k < 4; k++) {
+            int nx = x + dx[k];
+            int ny = y + dy[k];
 
-            if (0 <= a && a <= 1000 &&
-                0 <= b && b <= 1000 &&
-                (!broken.count(pos) || broken[pos] > cost)) {
-                    broken[pos] = cost;
-                    q.push(pos);
+            if (nx < 0 || nx > 1000 || ny < 0 || ny > 1000) continue;
+
+            int cost = curCost + haybale[nx][ny];
+
+            if (broken[nx][ny] == -1 || broken[nx][ny] > cost) {
+                broken[nx][ny] = cost;
+                q.push({nx, ny});
             }
         }
     }
 
-    cout << broken[{0,0}] << endl;
+    cout << broken[0][0] << "\n";
 
     return 0;
 }
