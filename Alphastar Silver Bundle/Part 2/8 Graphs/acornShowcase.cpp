@@ -30,10 +30,77 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 // Solution Code below
 
 int main() {
+    int N, M;
+    cin >> N >> M;
+
+    v<pi> acorns(N);
+    rep(i,0,N) {
+        cin >> acorns[i].first;
+        cin >> acorns[i].second;
+    }
+
+    vvi adj(N);
+    rep(i,0,M) {
+        int u, v;
+        cin >> u >> v;
+        u--; v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vi visited(N, 0);
+    vv<pi> groups;
+    queue<int> q;
+
+    rep(i,0,N) {
+        if (!visited[i]) {
+            groups.push_back({acorns[i]});
+            q.push(i);
+            visited[i] = 1;
+        } else {
+            continue;
+        }
+
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+
+            for (int adjNode : adj[node]) {
+                if (!visited[adjNode]) {
+                    q.push(adjNode);
+                    visited[adjNode] = 1;
+                    groups.back().push_back(acorns[adjNode]);
+                }
+            }
+        }
+    }
+
+    int minPerimeter = 1e9;
+
+    for (const auto& group : groups) {
+        int maxX = 0; int maxY = 0;
+        int minX = 1e9; int minY = 1e9;
+        int i = 0;
+        for (auto [x, y] : group) {
+            if (i == 0) {
+                minX = x;
+                maxX = x;
+                minY = y;
+                maxY = y;
+            }
+            minX = min(x, minX);
+            maxX = max(x, maxX);
+            minY = min(y, minY);
+            maxY = max(y, maxY);
+            i++;
+        }
+
+        int perimeter = 2*(maxX-minX+maxY-minY);
+        minPerimeter = min(perimeter, minPerimeter);
+    }
+
+    cout << minPerimeter << endl;
     
-
-
-
 
     return 0;
 }
