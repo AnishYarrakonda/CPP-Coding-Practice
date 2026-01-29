@@ -49,13 +49,14 @@ int main() {
 
         diffArray[min(curr, pos)]++;
         diffArray[max(curr, pos)]--;
+
+        curr = pos;
     }
 
     int running = 0;
     int prev = -1e9;
     int ANS = 0;
     for (auto [pos, change] : diffArray) {
-        cout << pos << " " << change << endl;
         if (running >= K) {
             ANS += pos - prev;
         }
