@@ -33,7 +33,7 @@ int main() {
     int N, K;
     cin >> N >> K;
 
-    umap<int,int> diffArray;
+    map<int,int> diffArray;
     diffArray.insert({0, 0});
 
     int curr = 0;
@@ -46,9 +46,24 @@ int main() {
         int pos = curr + x;
 
         diffArray.insert({pos, 0});
-        
 
+        diffArray[min(curr, pos)]++;
+        diffArray[max(curr, pos)]--;
     }
+
+    int running = 0;
+    int prev = -1e9;
+    int ANS = 0;
+    for (auto [pos, change] : diffArray) {
+        cout << pos << " " << change << endl;
+        if (running >= K) {
+            ANS += pos - prev;
+        }
+        running += change;
+        prev = pos;
+    }
+
+    cout << ANS << endl;
 
     return 0;
 }
