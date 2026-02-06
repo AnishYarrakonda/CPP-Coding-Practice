@@ -30,5 +30,6 @@ template<typename T> void prettyprintnewline(const v<T>& vec) { for(auto &x : ve
 // Solution Code below
 
 int main() {
+    
     return 0;
 }
